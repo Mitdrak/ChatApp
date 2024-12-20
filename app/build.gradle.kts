@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -21,6 +23,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val localProperties = Properties().apply {
+            val localPropertiesFile = rootProject.file("local.properties")
+            if (localPropertiesFile.exists()) {
+                localPropertiesFile.inputStream().use { load(it) }
+            }
+        }
+        buildConfigField("String", "GITHUB_TOKEN", "\"${localProperties["GITHUB_TOKEN"]}\"")
+        buildConfigField("String", "GLOBAL_URL", "\"${localProperties["GLOBAL_URL"]}\"")
+        /*buildConfigField("String", "GITHUB_TOKEN", "\"${GITHUB_TOKEN}\"")*/
+
+
     }
 
     buildTypes {
@@ -41,6 +54,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
 }

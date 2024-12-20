@@ -1,5 +1,6 @@
 package com.example.chatproject.data.network
 
+import com.example.chatproject.BuildConfig
 import com.example.chatproject.data.local.WebSocketClient
 import com.example.chatproject.data.repository.SocketRepository
 import com.example.chatproject.models.ChatMessage
@@ -15,11 +16,14 @@ class SocketRepositoryImpl @Inject constructor(private val webSocketClient: WebS
     private var webSocket: WebSocket? = null
     private val gson = Gson()
 
+    var gitKey = BuildConfig.GITHUB_TOKEN
+    var globalUrl = BuildConfig.GLOBAL_URL
+
     override fun connect() {
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("ws://stunning-space-umbrella-xxwj9949wvvc69rp-9090.app.github.dev/chat")
-            .addHeader("X-Github-Token", "ghu_4bpzzC7VVlSuJ025LPXXHFzYoHvQE80kN3lw")
+            .url(globalUrl)
+            .addHeader("X-Github-Token", gitKey)
             .build()
         webSocket = client.newWebSocket(request, webSocketClient)
     }
