@@ -16,8 +16,8 @@ class SocketRepositoryImpl @Inject constructor(private val webSocketClient: WebS
     private var webSocket: WebSocket? = null
     private val gson = Gson()
 
-    var gitKey = BuildConfig.GITHUB_TOKEN
-    var globalUrl = BuildConfig.GLOBAL_URL
+    private var gitKey = BuildConfig.GITHUB_TOKEN
+    private var globalUrl = BuildConfig.GLOBAL_URL
 
     override fun connect() {
         val client = OkHttpClient()
