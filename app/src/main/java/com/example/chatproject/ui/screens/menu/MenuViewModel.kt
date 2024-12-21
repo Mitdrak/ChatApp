@@ -1,4 +1,4 @@
-package com.example.chatproject.ui.screens
+package com.example.chatproject.ui.screens.menu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MenuViewModel @Inject constructor(private val socketRepository: SocketRepository) :
     ViewModel() {
+
     fun connect() {
         viewModelScope.launch {
             socketRepository.connect()

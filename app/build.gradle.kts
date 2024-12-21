@@ -76,6 +76,9 @@ dependencies {
     implementation(libs.androidx.gson)
     implementation(libs.androidx.hilt)
     kapt(libs.androidx.hilt.compiler)
+
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:2.8.5")
     implementation(libs.androidx.hilt.navigation)
 
     implementation(libs.hilt.android.gradle.plugin)

@@ -1,4 +1,4 @@
-package com.example.chatproject.ui.screens
+package com.example.chatproject.ui.screens.menu
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,9 +19,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,16 +31,22 @@ import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.chatproject.R
+import com.example.chatproject.ui.navigation.NavigationRoutes
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuScreen(modifier: Modifier = Modifier, viewModel: MenuViewModel = viewModel()) {
+fun MenuScreen(
+    modifier: Modifier = Modifier,
+    viewModel: MenuViewModel = hiltViewModel(),
+    navController: NavController
+) {
     //Cantidad de salas
     val list: List<String> = listOf(
         "Sala 1",
@@ -67,14 +72,26 @@ fun MenuScreen(modifier: Modifier = Modifier, viewModel: MenuViewModel = viewMod
         "No quiero habar hoy, mejor mañana",
         "Ok, nos vemos"
     )
-    TopAppBar(
-        title = {
-            Text("Chat App")
-        }, colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        )
-    )
     Column(modifier = Modifier.fillMaxSize()) {
+        MediumTopAppBar(
+            actions = {
+                Button(onClick = {
+                    viewModel.connect()
+                }) {
+                    Text("Connect")
+                }
+                Button(onClick = {
+                    viewModel.disconnect()
+                }) {
+                    Text("Disconnect")
+                }
+            },
+            title = {
+                Text("Chat App")
+            }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            )
+        )
         LazyColumn {
             items(list.count()) { message ->
                 Card(modifier = Modifier
@@ -85,7 +102,8 @@ fun MenuScreen(modifier: Modifier = Modifier, viewModel: MenuViewModel = viewMod
                             .fillMaxWidth()
                             .padding(8.dp)
                             .clickable {
-                                println("Clicked at $list[message]")
+                                println("Clicked at ${list[message]}")
+                                navController.navigate(NavigationRoutes.Authenticated.ChatRoom.route)
                             },
                         horizontalArrangement = Arrangement.Start
                     ) {
@@ -106,43 +124,6 @@ fun MenuScreen(modifier: Modifier = Modifier, viewModel: MenuViewModel = viewMod
             }
         }
     }
-
-    /*Column(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(), horizontalArrangement = Arrangement.Center
-        ) {
-            Button(onClick = {
-                viewModel.connect()
-            }) {
-                Text("Connect")
-            }
-            Button(onClick = {
-                viewModel.disconnect()
-            }) {
-                Text("Disconnect")
-
-            }
-        }
-        Row {
-            Button(onClick = {
-                viewModel.joinRoom()
-            }) {
-                Text("Join Room")
-            }
-            Button(onClick = {
-                viewModel.sendMessage("Hello from Android")
-            }) { }
-        }
-        LazyColumn {
-            *//*messages.forEach { message ->
-                item {
-                    Text(text = message)
-                }
-            }*//*
-        }
-    }*/
 }
 
 @Composable
@@ -174,10 +155,4 @@ fun CircularImage(
             colorFilter = colorFilter,
         )
     }
-}
-
-@Preview
-@Composable
-fun PreviewMenuScreen() {
-    MenuScreen()
 }
