@@ -9,30 +9,33 @@ import okhttp3.WebSocketListener
 import org.json.JSONArray
 import org.json.JSONObject
 
-class WebSocketClient(private val onMessageReceived: (String) -> Unit): WebSocketListener() {
+class WebSocketClient(var onMessageReceived: (ChatMessage) -> Unit) : WebSocketListener() {
     override fun onOpen(webSocket: WebSocket, response: Response) {
         Log.e("burak", "Connected")
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
-        onMessageReceived(text)
-        /*output("Received : $text")
+        output("Received : $text")
         val jsonObject = JSONObject(text)
         val dataHeader = jsonObject.getString("type")
+        val sender = jsonObject.getString("sender")
         if (dataHeader == "say") {
-            val data = jsonObject.getString("data")
-            *//*onMessageReceived(data)*//*
+            if (sender != "Android") {
+                val chatMessage = Gson().fromJson(text, ChatMessage::class.java)
+                onMessageReceived(chatMessage)
+            } else {
+                Log.e("burak", "Android")
+            }
         }
-        if (dataHeader == "join") {
-            val data = jsonObject.getString("data")
+        if (dataHeader == "join") {/*val data = jsonObject.getString("data")
             val jsonArray = JSONArray(data)
             val names = mutableListOf<String>()
             for (i in 0 until jsonArray.length()) {
                 val userObject = jsonArray.getJSONObject(i)
                 val name = userObject.getString("name")
-                *//*onMessageReceived("User $name joined the chat")*//*
-            }
-        }*/
+                onMessageReceived("User $name joined the chat")
+            }*/
+        }
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {

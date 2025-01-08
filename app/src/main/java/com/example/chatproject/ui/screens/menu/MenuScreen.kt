@@ -48,17 +48,17 @@ fun MenuScreen(
     navController: NavController
 ) {
     //Cantidad de salas
-    val list: List<String> = listOf(
-        "Sala 1",
-        "Sala 2",
-        "Sala 3",
-        "Sala 4",
-        "Sala 5",
-        "Sala 6",
-        "Sala 7",
-        "Sala 8",
-        "Sala 9",
-        "Sala 10"
+    val list = listOf(
+        "room1" to "Sala 1",
+        "room2" to "Sala 2",
+        "room3" to "Sala 3",
+        "room4" to "Sala 4",
+        "room5" to "Sala 5",
+        "room6" to "Sala 6",
+        "room7" to "Sala 7",
+        "room8" to "Sala 8",
+        "room9" to "Sala 9",
+        "room10" to "Sala 10"
     )
     val lasMessages = listOf(
         "Hoy es un dia soleado",
@@ -73,39 +73,41 @@ fun MenuScreen(
         "Ok, nos vemos"
     )
     Column(modifier = Modifier.fillMaxSize()) {
-        MediumTopAppBar(
-            actions = {
-                Button(onClick = {
-                    viewModel.connect()
-                }) {
-                    Text("Connect")
-                }
-                Button(onClick = {
-                    viewModel.disconnect()
-                }) {
-                    Text("Disconnect")
-                }
-            },
-            title = {
-                Text("Chat App")
-            }, colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-            )
+        MediumTopAppBar(actions = {
+            Button(onClick = {
+                viewModel.connect()
+            }) {
+                Text("Connect")
+            }
+            Button(onClick = {
+                viewModel.disconnect()
+            }) {
+                Text("Disconnect")
+            }
+        }, title = {
+            Text("Chat App")
+        }, colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        )
         )
         LazyColumn {
             items(list.count()) { message ->
-                Card(modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()) {
+                val (id, name) = list[message]
+                Card(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
                             .clickable {
                                 println("Clicked at ${list[message]}")
-                                navController.navigate(NavigationRoutes.Authenticated.ChatRoom.route)
-                            },
-                        horizontalArrangement = Arrangement.Start
+                                navController.navigate(
+                                    NavigationRoutes.Authenticated.ChatRoom.chatRoomRoute(id),
+                                )
+                            }, horizontalArrangement = Arrangement.Start
                     ) {
                         CircularImage(
                             painter = painterResource(id = R.drawable.ic_launcher_foreground),
@@ -114,7 +116,7 @@ fun MenuScreen(
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Column {
-                            Text(text = list[message])
+                            Text(text = name)
                             Text(text = lasMessages[message])
                         }
                     }

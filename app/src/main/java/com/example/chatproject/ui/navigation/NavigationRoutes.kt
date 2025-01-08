@@ -13,6 +13,8 @@ sealed class NavigationRoutes {
     sealed class Authenticated(val route: String) : NavigationRoutes() {
         object NavigationRoute : Authenticated(route = "authenticated")
         object Menu : Authenticated(route = "Menu")
-        object ChatRoom : Authenticated(route = "ChatRoom")
+        object ChatRoom : Authenticated(route = "chatRoom/{chatRoomId}")
+
+        fun chatRoomRoute(chatRoomId: String) = "chatRoom/$chatRoomId"
     }
 }

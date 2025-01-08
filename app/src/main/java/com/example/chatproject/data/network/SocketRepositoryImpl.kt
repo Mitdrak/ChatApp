@@ -19,6 +19,17 @@ class SocketRepositoryImpl @Inject constructor(private val webSocketClient: WebS
     private var gitKey = BuildConfig.GITHUB_TOKEN
     private var globalUrl = BuildConfig.GLOBAL_URL
 
+    private var onNewMessage: (ChatMessage) -> Unit = {}
+    init {
+        webSocketClient.onMessageReceived = { message ->
+            onNewMessage(message)
+        }
+    }
+
+    override fun setOnNewMessageListener(listener: (ChatMessage) -> Unit) {
+        onNewMessage = listener
+    }
+
     override fun connect() {
         val client = OkHttpClient()
         val request = Request.Builder()
@@ -38,8 +49,8 @@ class SocketRepositoryImpl @Inject constructor(private val webSocketClient: WebS
         webSocket?.send(jsonMessage)
     }
 
-    override fun joinRoom() {
-        val joinMessage = JoinMessage("join", "Android", "room1")
+    override fun joinRoom(roomId: String) {
+        val joinMessage = JoinMessage("join", "Android", roomId)
         val jsonMessage = gson.toJson(joinMessage)
         webSocket?.send(jsonMessage)
     }

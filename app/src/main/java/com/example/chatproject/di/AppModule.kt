@@ -18,7 +18,6 @@ class AppModule {
     fun provideSocketClient(): WebSocketClient {
         return WebSocketClient(
             onMessageReceived = { message ->
-                println("Message received: $message")
             },
         )
     }

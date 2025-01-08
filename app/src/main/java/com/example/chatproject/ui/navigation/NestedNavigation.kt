@@ -18,8 +18,9 @@ fun NavGraphBuilder.authenticatedGraph(navController: NavController) {
             MenuScreen(navController = navController)
         }
         //ChatRoom
-        composable(route = NavigationRoutes.Authenticated.ChatRoom.route) {
-            ChatRoomScreen(navController = navController)
+        composable(route = NavigationRoutes.Authenticated.ChatRoom.route) { backStackEntry ->
+            val chatRoomId = backStackEntry.arguments?.getString("chatRoomId")
+            ChatRoomScreen(navController = navController, chatRoomId = chatRoomId)
         }
     }
 }

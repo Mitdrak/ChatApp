@@ -23,15 +23,4 @@ class MenuViewModel @Inject constructor(private val socketRepository: SocketRepo
             socketRepository.disconnect()
         }
     }
-    fun joinRoom() {
-        viewModelScope.launch {
-            socketRepository.joinRoom()
-        }
-    }
-
-    fun sendMessage(message: String) {
-        viewModelScope.launch {
-            socketRepository.sendMessage(message)
-        }
-    }
 }
